@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <log.h>
-#include <network.h>
+#include "log.h"
+#include "network.h"
 
 void setup() {
     Serial.begin(115200);
