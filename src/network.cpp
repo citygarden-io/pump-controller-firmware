@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
-#include <map>
-#include "Log.h"
+
+// #include "log.h"
 #include "network.h"
 
 #ifndef WIFI_SSID
@@ -14,34 +14,24 @@
 
 NetworkManager::NetworkManager()
 {
-    this->logger = Log.module("NETWORK");
+    this->log = Logger("NetworkManager");
 }
 
 void NetworkManager::init()
 {
-    this->logger.info("Initializing.");
+    this->log.info("Initializing.");
 
     WiFi.setAutoReconnect(true);
     WiFi.persistent(false);
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-    this->logger.debug("WiFi parameters setted.");
+    this->log.debug("WiFi parameters setted.");
 
-    this->logger.info("Initialized.");
+    this->log.info("Initialized.");
 }
 
 void NetworkManager::loop()
 {
-    wl_status_t currentWIFIStatus = WiFi.status();
-    wl_status_t previousWIFIStatus = this->wifiStatus;
-
-    if (previousWIFIStatus != currentWIFIStatus) {
-        this->wifiStatus = currentWIFIStatus;
-        LogParameters parameters = LogParameters{
-            { "previousStatus", this->wifiStatusStr(previousWIFIStatus) },
-            { "currentStatus",  this->wifiStatusStr(currentWIFIStatus) },
-        };
-        this->logger.info("WiFi status changed.", parameters);
-    }
+    this->loopWIFI();
 }
 
 wl_status_t NetworkManager::getWIFIStatus()
@@ -81,4 +71,19 @@ const char* NetworkManager::wifiStatusStr(wl_status_t wifiStatus)
     return "UNKNOWN";
 }
 
-NetworkManager Network;
+void NetworkManager::loopWIFI()
+{
+    wl_status_t currentWIFIStatus = WiFi.status();
+    wl_status_t previousWIFIStatus = this->wifiStatus;
+
+    if (previousWIFIStatus != currentWIFIStatus) {
+        this->wifiStatus = currentWIFIStatus;
+        LogParameters parameters = LogParameters{
+            { "previousStatus", (char *) this->wifiStatusStr(previousWIFIStatus) },
+            { "currentStatus",  (char *) this->wifiStatusStr(currentWIFIStatus) },
+        };
+        this->log.info("WiFi status changed.", parameters);
+    }
+}
+
+NetworkManager Network = NetworkManager();

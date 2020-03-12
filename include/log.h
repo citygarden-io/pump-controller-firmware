@@ -2,8 +2,8 @@
 
 #include <Arduino.h>
 #include <map>
-
-typedef std::map<const char *, const char *> LogParameters;
+ 
+typedef std::map<const char *, char *> LogParameters;
 
 enum LogLevel {
     LOG_LEVEL_OFF = 100,
@@ -18,14 +18,13 @@ enum LogLevel {
 
 class Logger
 {
-    char* currentModule;
+    char currentModule[20];
     uint32 lastTickMillis = 0;
     uint32 tickMultiplier = 1;
+    char* parametersBuffer;
 public:
     Logger();
     Logger(const char* module);
-
-    Logger module(const char* module);
 
     void log(LogLevel level, const char* module, const char* message, LogParameters parameters);
     void fatal(const char* module, const char* message, LogParameters parameters);
@@ -53,11 +52,9 @@ public:
     void trace(const char* message, LogParameters parameters);
     void trace(const char* message);
 
+    uint64 millisFromStart();
 private:
     const char* levelStr(LogLevel level);
     const char* parametersStr(LogParameters parameters);
     const char* modulePath(const char* module);
-    uint64 millisFromStart();
 };
-
-extern Logger Log;

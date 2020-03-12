@@ -1,20 +1,29 @@
 #include <Arduino.h>
 #include "log.h"
 #include "network.h"
+#include "gui.h"
+#include "health.h"
+#include "pump.h"
+
+Logger Log = Logger("System");
 
 void setup() {
     Serial.begin(115200);
     Serial.println();
-
+    
     Log.info("Hello :-)");
     
     Network.init();
-    // TODO: Power.init();
-    // TODO: GUI.init();
+    Health.init();
+    GUI.init();
+    Pump.init();
+
+    Log.info("Initialization complete.");
 }
 
 void loop() {
     Network.loop();
-    // TODO: Power.loop();
-    // TODO: GUI.loop();
+    Health.loop();
+    GUI.loop();
+    Pump.loop();
 }

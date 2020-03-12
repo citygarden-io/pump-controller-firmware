@@ -3,12 +3,12 @@
 
 Logger::Logger()
 {
-    this->currentModule = NULL;
+    strcpy(this->currentModule, "Unknown");
 }
 
 Logger::Logger(const char* module)
 {
-    this->currentModule = (char *) module;
+    strcpy(this->currentModule, module);
 }
 
 void Logger::log(LogLevel level, const char* module, const char* message, LogParameters parameters)
@@ -26,15 +26,6 @@ void Logger::log(LogLevel level, const char* module, const char* message, LogPar
         message,
         parametersStr
     );
-}
-
-Logger Logger::module(const char* module)
-{
-    char* modulePath = (char *) this->modulePath(module);
-
-    Serial.println(modulePath);
-
-    return Logger(modulePath);
 }
 
 void Logger::info(const char* module, const char* message)
@@ -57,6 +48,10 @@ void Logger::debug(const char* module, const char* message)
     this->log(LogLevel::LOG_LEVEL_DEBUG, module, message, LogParameters());
 }
 
+void Logger::debug(const char* module, const char* message, LogParameters parameters)
+{
+    this->log(LogLevel::LOG_LEVEL_DEBUG, module, message, parameters);
+}
 
 void Logger::debug(const char* message)
 {
@@ -154,11 +149,13 @@ const char* Logger::modulePath(const char* module)
     }
 
     if (currentModuleSetted && newModuleSetted) {
-        String modulePath = String(this->currentModule) + String(".") + String(module);
-        return modulePath.c_str();
+        std::string buffer;
+        buffer.append(this->currentModule);
+        buffer.append(".");
+        buffer.append(module);
+        return buffer.c_str();
     }
+
 
     return "";
 }
-
-Logger Log("MAIN");
