@@ -17,13 +17,17 @@ void PumpController::init()
 
 void PumpController::loop()
 {
+    if (!this->pumpControllerInitialized) {
+        return;
+    }
+
     this->loopReadCurrentFlowRate();
     this->loopWriteDesiredFlowRate();
 }
 
 void PumpController::loopWriteDesiredFlowRate()
 {
-    if (this->log.millisFromStart() - this->lastWriteMilis < PUMP_CONTROLLER_WRITE_INTERVAL) {
+    if (this->log.millisFromStart() - this->lastWriteMillis < PUMP_CONTROLLER_WRITE_INTERVAL) {
         return;
     }
 
@@ -40,12 +44,12 @@ void PumpController::loopWriteDesiredFlowRate()
     this->wireWriteRegister(PUMP_CONTROLLER_REGISTER_PUMP_6_DESIRED_FLOW, this->desiredFlowRate[5]);
     delay(10);
 
-    this->lastWriteMilis = log.millisFromStart();
+    this->lastWriteMillis = log.millisFromStart();
 }
 
 void PumpController::loopReadCurrentFlowRate()
 {
-    if (this->log.millisFromStart() - this->lastReadMilis < PUMP_CONTROLLER_READ_INTERVAL) {
+    if (this->log.millisFromStart() - this->lastReadMillis < PUMP_CONTROLLER_READ_INTERVAL) {
         return;
     }
 
@@ -62,7 +66,7 @@ void PumpController::loopReadCurrentFlowRate()
     this->currentFlowRate[5] = this->wireReadRegister(PUMP_CONTROLLER_REGISTER_PUMP_6_CURRENT_FLOW);
     delay(10);
 
-    this->lastReadMilis = log.millisFromStart();
+    this->lastReadMillis = log.millisFromStart();
 }
 
 void PumpController::initPumpController()

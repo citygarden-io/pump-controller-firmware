@@ -35,8 +35,8 @@ public:
 private:
     Logger log;
     bool pumpControllerInitialized = false;
-    uint64 lastReadMilis = 0;
-    uint64 lastWriteMilis = 0;
+    uint64 lastReadMillis = 0;
+    uint64 lastWriteMillis = 0;
 
     char desiredFlowRate[6] = {0};
     char currentFlowRate[6] = {0};

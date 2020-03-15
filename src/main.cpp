@@ -4,6 +4,9 @@
 #include "gui.h"
 #include "health.h"
 #include "pump.h"
+#include "http.h"
+
+ADC_MODE(ADC_VCC);
 
 Logger Log = Logger("System");
 
@@ -17,6 +20,7 @@ void setup() {
     Health.init();
     GUI.init();
     Pump.init();
+    HTTP.init();
 
     Log.info("Initialization complete.");
 }
@@ -26,4 +30,5 @@ void loop() {
     Health.loop();
     GUI.loop();
     Pump.loop();
+    HTTP.loop();
 }

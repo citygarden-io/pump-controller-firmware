@@ -35,6 +35,10 @@ void HealthService::initPowerSensor()
 
 void HealthService::loopPowerSensor()
 {
+    if (this->log.millisFromStart() - this->lastPowerReadMillis < HEALTH_POWER_READ_INTERVAL) {
+        return;
+    }
+
     this->mainVoltage = this->powerSensor.getBusVoltage_V();
     this->mainCurrent = this->powerSensor.getCurrent_mA() / 1000;
     this->mainPower   = this->powerSensor.getPower_mW() / 1000;
@@ -42,6 +46,8 @@ void HealthService::loopPowerSensor()
     sprintf(this->mainVoltageStr, "%6.4f", this->mainVoltage);
     sprintf(this->mainCurrentStr, "%6.4f", this->mainCurrent);
     sprintf(this->mainPowerStr, "%6.4f", this->mainPower);
+
+    this->lastPowerReadMillis = this->log.millisFromStart();
 }
 
 float HealthService::getMainVoltage()
@@ -76,17 +82,23 @@ char* HealthService::getMainPowerStr()
 
 void HealthService::loopHealthLog()
 {
+    if (this->log.millisFromStart() - this->lastLogMillis < HEALTH_LOG_INTERVAL) {
+        return;
+    }
+
     LogParameters parameters = LogParameters{
         { "mainVoltage", this->mainVoltageStr },
         { "mainCurrent",  this->mainCurrentStr },
         { "mainPower",  this->mainPowerStr },
     };
-    this->log.info("Current health.", parameters);
+    this->log.trace("Current health.", parameters);
+
+    this->lastLogMillis = this->log.millisFromStart();
 }
 
 void HealthService::loopHealthMetric()
 {
-    
+
 }
 
 HealthService Health = HealthService();

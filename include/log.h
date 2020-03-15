@@ -21,7 +21,6 @@ class Logger
     char currentModule[20];
     uint32 lastTickMillis = 0;
     uint32 tickMultiplier = 1;
-    char* parametersBuffer;
 public:
     Logger();
     Logger(const char* module);
@@ -55,6 +54,7 @@ public:
     uint64 millisFromStart();
 private:
     const char* levelStr(LogLevel level);
-    const char* parametersStr(LogParameters parameters);
     const char* modulePath(const char* module);
+
+    void printLog(LogLevel level, const char* module, const char* message, LogParameters parameters);
 };

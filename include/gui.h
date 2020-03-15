@@ -11,12 +11,6 @@ enum GUIDisplayPage {
 
 class GUIManager
 {
-    U8G2 display;
-    GUIDisplayPage displayCurrentPage = GUI_DISPLAY_PAGE_HEALTH;
-    uint8 heartbeatBPM = 60;
-    uint64 heartbeatLastPulseMilis = 0;
-    
-    Logger log;
 public:
     GUIManager();
 
@@ -25,6 +19,13 @@ public:
 
     void setHeartbeatBPM(uint8 bpm);
 private:
+    U8G2 display;
+    GUIDisplayPage displayCurrentPage = GUI_DISPLAY_PAGE_HEALTH;
+    uint8 heartbeatBPM = 60;
+    uint64 heartbeatLastPulseMilis = 0;
+    
+    Logger log;
+    
     void initDisplay();
     
     void loopInput();

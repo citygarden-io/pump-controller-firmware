@@ -64,12 +64,14 @@ void GUIManager::drawPageHealth()
     this->display.setFontMode(1);
     this->display.setFontDirection(0);
 
-    this->display.drawStr(17, 10, "[V]: ");
-    this->display.drawStr(50, 10, Health.getMainVoltageStr());
-    this->display.drawStr(17, 23, "[A]: ");
-    this->display.drawStr(50, 23, Health.getMainCurrentStr());
-    this->display.drawStr(17, 36, "[W]: ");
-    this->display.drawStr(50, 36, Health.getMainPowerStr());
+    this->display.drawStr(17, 10, "[m.V]: ");
+    this->display.drawStr(62, 10, Health.getMainVoltageStr());
+    this->display.drawStr(17, 23, "[m.A]: ");
+    this->display.drawStr(62, 23, Health.getMainCurrentStr());
+    this->display.drawStr(17, 36, "[m.W]: ");
+    this->display.drawStr(62, 36, Health.getMainPowerStr());
+    this->display.drawStr(17, 49, "[e.V]: ");
+    this->display.drawStr(17, 62, "[m.C]: ");
 }
 
 void GUIManager::drawPageNetwork()

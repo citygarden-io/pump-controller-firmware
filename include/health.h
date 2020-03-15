@@ -7,18 +7,11 @@
 #define INA219_WIRE_ADDRESS 0x40
 #endif
 
+#define HEALTH_LOG_INTERVAL 1000
+#define HEALTH_POWER_READ_INTERVAL 100
+
 class HealthService
 {
-    Adafruit_INA219 powerSensor;
-    Logger log;
-
-    float mainVoltage = 0.0f;    
-    float mainCurrent = 0.0f;
-    float mainPower = 0.0f;
-
-    char* mainVoltageStr;
-    char* mainCurrentStr;
-    char* mainPowerStr;
 public:
     HealthService();
 
@@ -37,6 +30,20 @@ private:
     void loopPowerSensor();
     void loopHealthLog();
     void loopHealthMetric();
+
+    Adafruit_INA219 powerSensor;
+    Logger log;
+
+    uint64 lastLogMillis = 0;
+    uint64 lastPowerReadMillis = 0;
+
+    float mainVoltage = 0.0f;    
+    float mainCurrent = 0.0f;
+    float mainPower = 0.0f;
+
+    char* mainVoltageStr;
+    char* mainCurrentStr;
+    char* mainPowerStr;
 };
 
 extern HealthService Health;
